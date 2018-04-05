@@ -74,7 +74,11 @@ def densenet(images, num_classes=1001, is_training=False,
             end_points[scope] = net
 
             scope = 'transition1'
-            net = slim.avg_pool2d(net, [2,2], stride = 2, scope = scope)
+            net = bn_act_conv_drp(net, reduce_dim(net), [1,1], scope=scope )
+            end_points[scope] = net
+
+            scope = 'avgpool1'
+            net = slim.avg_pool2d(net, [2,2], stride=2, scope=scope)
             end_points[scope] = net
 
             scope = 'block2'
