@@ -61,12 +61,12 @@ def densenet(images, num_classes=1001, is_training=False,
         with slim.arg_scope(bn_drp_scope(is_training=is_training,
                                          keep_prob=dropout_keep_prob)) as ssc:
             scope = 'conv1'
-            net = slim.arg_scope(bn_drp_score(is_training = is_training, keep_prob = dropout_keep_prob))
+            net = slim.conv2d(images, 2*growth, [7,7], stride = 2, scope=scope)
 
             end_points[scope] = net
 
             scope = 'pool1'
-            net = slim.max_pool2d(net,[3,3], padding = 'same', stride = 2, scope = scope)
+            net = slim.max_pool2d(net, [3, 3], padding='same', stride=2, scope=scope)
             end_points[scope] = net
 
             scope = 'block1'
@@ -108,7 +108,7 @@ def densenet(images, num_classes=1001, is_training=False,
             end_points[scope] = aux_logits
 
             scope = 'block4'
-            net = blcok(net,24, growth, scope = scope)
+            net = block(net,24, growth, scope = scope)
             end_points[scope] = net
 
             scope = 'last_batch_norm_relu'
